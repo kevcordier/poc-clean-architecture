@@ -7,8 +7,6 @@ export class RacePresenter {
   @ApiProperty()
   title: string;
   @ApiProperty()
-  isDone: boolean;
-  @ApiProperty()
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;

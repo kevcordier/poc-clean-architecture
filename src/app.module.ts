@@ -6,15 +6,17 @@ import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module'
 import { RepositoriesModule } from './infrastructure/repositories/repositories.module';
 import { RaceUsecaseProxyModule } from './infrastructure/usecase-proxy/race-usecase-proxy.module';
 import { ControllersModule } from './infrastructure/controllers/controllers.module';
+import { SourceUsecaseProxyModule } from './infrastructure/usecase-proxy/source-usecase-proxy.module';
 
 @Module({
   imports: [
     EnvironmentConfigModule,
-    LoggerModule,
     ExceptionsModule,
     RepositoriesModule,
-    RaceUsecaseProxyModule.register(),
+    //LoggerModule,
     ControllersModule,
+    RaceUsecaseProxyModule.register(),
+    SourceUsecaseProxyModule.register(),
   ],
 })
 export class AppModule {}

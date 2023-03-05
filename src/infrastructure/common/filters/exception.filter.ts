@@ -4,8 +4,8 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
-import { LoggerService } from '../../logger/logger.service';
 
 interface IError {
   message: string;
@@ -14,7 +14,7 @@ interface IError {
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  constructor(private readonly logger: LoggerService) {}
+  constructor(private readonly logger: Logger) {}
 
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();

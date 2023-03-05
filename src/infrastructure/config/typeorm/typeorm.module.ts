@@ -15,11 +15,11 @@ export const getTypeOrmModuleOptions = (
     database: config.getDatabaseName(),
     entities: [__dirname + './../../**/*.entity{.ts,.js}'],
     synchronize: config.getDatabaseSync(),
-    schema: process.env.DATABASE_SCHEMA,
-    migrationsRun: process.env.NODE_ENV !== 'local',
+    schema: config.getDatabaseSchema(),
+    migrationsRun: false,
     migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
     cli: {
-      migrationsDir: 'src/migrations',
+      migrationsDir: '/migrations',
     },
   } as TypeOrmModuleOptions);
 

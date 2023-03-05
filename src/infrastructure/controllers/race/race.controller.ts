@@ -1,4 +1,12 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { RaceUsecaseProxyModule } from '../../usecase-proxy/race-usecase-proxy.module';
@@ -10,9 +18,10 @@ import { updateRaceUsecase } from '../../../usecases/race/update-race.usecase';
 import { addRaceUsecase } from '../../../usecases/race/add-race.usecase';
 import { RacePresenter } from './race.presenter';
 import { ApiResponseType } from '../../common/swagger/response.decorator';
+import { AddRaceDto, UpdateRaceDto } from './race.dto';
 
 @Controller('race')
-@ApiTags('todo')
+@ApiTags('race')
 @ApiResponse({ status: 500, description: 'Internal error' })
 @ApiExtraModels(RacePresenter)
 export class RaceController {
@@ -38,10 +47,41 @@ export class RaceController {
   }
 
   @Get('/')
-  @ApiResponseType(RacePresenter, false)
-  async getRacs() {
+  @ApiResponseType(RacePresenter, true)
+  async getRaces() {
     const races = await this.getAllRacesUsecaseProxy.getInstance().execute();
 
     return races.map((race) => new RacePresenter(race));
+  }
+
+  @Post('/')
+  @ApiResponseType(RacePresenter, true)
+  async insertRace(@Query('body') race: AddRaceDto) {
+    const newRace = await this.addRaceUsecaseProxy.getInstance().execute(race);
+
+    return new RacePresenter(newRace);
+  }
+
+  @Put('/:id')
+  @ApiResponseType(RacePresenter, true)
+  async updateRace(
+    @Query('id') id: string,
+    @Query('body') race: UpdateRaceDto,
+  ) {
+    const updatedRace = await this.updateRaceUsecaseProxy
+      .getInstance()
+      .execute(id, race);
+
+    return new RacePresenter(updatedRace);
+  }
+
+  @Delete('/:id')
+  @ApiResponseType(RacePresenter, true)
+  async deleteSource(@Query('id') id: string) {
+    const deletedSource = await this.deleteRaceUsecaseProxy
+      .getInstance()
+      .execute(id);
+
+    return new RacePresenter(deletedSource);
   }
 }

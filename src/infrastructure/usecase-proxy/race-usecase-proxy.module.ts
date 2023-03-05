@@ -1,4 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Logger, Module } from '@nestjs/common';
 
 import { LoggerModule } from '../logger/logger.module';
 import { RepositoriesModule } from '../repositories/repositories.module';
@@ -10,7 +10,6 @@ import { getRacesUsecase } from '../../usecases/race/get-races.usecase';
 import { addRaceUsecase } from '../../usecases/race/add-race.usecase';
 import { updateRaceUsecase } from '../../usecases/race/update-race.usecase';
 import { deleteRaceUsecase } from '../../usecases/race/delete-race.usecase';
-import { LoggerService } from '../logger/logger.service';
 
 @Module({
   imports: [LoggerModule, RepositoriesModule, ExceptionsModule],
@@ -18,8 +17,8 @@ import { LoggerService } from '../logger/logger.service';
 export class RaceUsecaseProxyModule {
   static GET_RACE_USECASES_PROXY = 'getRaceUsecasesProxy';
   static GET_RACES_USECASES_PROXY = 'getRacesUsecasesProxy';
-  static ADD_RACE_USECASES_PROXY = 'postRaceUsecasesProxy';
-  static UPDATE_RACE_USECASES_PROXY = 'putRaceUsecasesProxy';
+  static ADD_RACE_USECASES_PROXY = 'addRaceUsecasesProxy';
+  static UPDATE_RACE_USECASES_PROXY = 'updateRaceUsecasesProxy';
   static DELETE_RACE_USECASES_PROXY = 'deleteRaceUsecasesProxy';
 
   static register(): DynamicModule {
@@ -42,7 +41,7 @@ export class RaceUsecaseProxyModule {
           inject: [DatabaseRaceRepository],
           provide: RaceUsecaseProxyModule.ADD_RACE_USECASES_PROXY,
           useFactory: (
-            logger: LoggerService,
+            logger: Logger,
             raceRepository: DatabaseRaceRepository,
           ) => new UsecaseProxy(new addRaceUsecase(logger, raceRepository)),
         },
@@ -50,7 +49,7 @@ export class RaceUsecaseProxyModule {
           inject: [DatabaseRaceRepository],
           provide: RaceUsecaseProxyModule.UPDATE_RACE_USECASES_PROXY,
           useFactory: (
-            logger: LoggerService,
+            logger: Logger,
             raceRepository: DatabaseRaceRepository,
           ) => new UsecaseProxy(new updateRaceUsecase(logger, raceRepository)),
         },
@@ -58,7 +57,7 @@ export class RaceUsecaseProxyModule {
           inject: [DatabaseRaceRepository],
           provide: RaceUsecaseProxyModule.DELETE_RACE_USECASES_PROXY,
           useFactory: (
-            logger: LoggerService,
+            logger: Logger,
             raceRepository: DatabaseRaceRepository,
           ) => new UsecaseProxy(new deleteRaceUsecase(logger, raceRepository)),
         },
